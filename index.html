@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Galeria El_Mascarado</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #111;
+            color: white;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            font-size: 2em;
+            font-weight: bold;
+            color: #ff6600;
+        }
+
+        .albums {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .album {
+            background: #222;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .album:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 102, 0, 0.7);
+        }
+
+        .album img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .album-title {
+            padding: 10px;
+            text-align: center;
+            background: #333;
+        }
+
+        .gallery {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            background: #000;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 9999;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .gallery.visible {
+            display: flex;
+        }
+
+        .photos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .photo-container img {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            color: rgba(255, 255, 255, 0.3);
+            font-weight: bold;
+            font-size: 1em;
+            text-align: center;
+            pointer-events: none;
+            width: 100%;
+        }
+
+        .photo-container {
+            position: relative;
+        }
+
+        .download-button {
+            display: block;
+            margin: 5px 0 15px 0;
+            background: #ff6600;
+            border: none;
+            color: white;
+            padding: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 6px;
+        }
+
+        .download-button:hover {
+            background: #e65400;
+        }
+
+        .code-area {
+            margin: 20px;
+            text-align: center;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            font-size: 1em;
+            border-radius: 6px;
+            border: none;
+            width: 180px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            background: #ff6600;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            color: white;
+        }
+
+        button:hover {
+            background: #e65400;
+        }
+
+        .close-btn {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: red;
+            padding: 10px 20px;
+            border-radius: 50%;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>Bem-vindo à Galeria do El_Mascarado!</header>
+
+    <div class="albums">
+        <div class="album" onclick="openGallery('album1')">
+            <img src="albuns/gigi/capa.jpg">
+            <div class="album-title">Casamento Ana & Lucas</div>
+        </div>
+        <div class="album" onclick="openGallery('album2')">
+            <img src="capa2.jpg">
+            <div class="album-title">Ensaio Praia</div>
+        </div>
+    </div>
+
+    <div id="gallery" class="gallery">
+        <button class="close-btn" onclick="closeGallery()">X</button>
+        <div class="photos" id="photoArea"></div>
+
+        <div class="code-area">
+            <p>Digite o código para liberar o download sem marca d'água:</p>
+            <input type="text" id="codeInput" maxlength="4">
+            <button onclick="unlockPhotos()">Desbloquear</button>
+        </div>
+    </div>
+
+    <script>
+        const albums = {
+            album1: {
+                code: "5050",
+                photosWatermarked: [
+                    "albuns/gigi/ft01.jpg", "albuns/gigi/ft02.jpg", "albuns/gigi/ft03.jpg", "albuns/gigi/ft04.jpg", "albuns/gigi/ft05.jpg"
+                ],
+                photosClean: [
+                    "albuns/gigi/ft01.jpg", "albuns/gigi/ft02.jpg", "albuns/gigi/ft03.jpg", "albuns/gigi/ft04.jpg", "albuns/gigi/ft05.jpg"
+                ]
+            },
+            album2: {
+                code: "6060",
+                photosWatermarked: [
+                    "praia1w.jpg", "praia2w.jpg", "praia3w.jpg", "praia4w.jpg", "praia5w.jpg"
+                ],
+                photosClean: [
+                    "praia1.jpg", "praia2.jpg", "praia3.jpg", "praia4.jpg", "praia5.jpg"
+                ]
+            }
+        };
+
+        let currentAlbum = null;
+        let unlocked = false;
+
+        function openGallery(albumName) {
+            currentAlbum = albums[albumName];
+            unlocked = false;
+            document.getElementById('gallery').classList.add('visible');
+            renderPhotos();
+        }
+
+        function closeGallery() {
+            document.getElementById('gallery').classList.remove('visible');
+            document.getElementById('codeInput').value = '';
+        }
+
+        function renderPhotos() {
+            const photoArea = document.getElementById('photoArea');
+            photoArea.innerHTML = '';
+
+            const photos = unlocked ? currentAlbum.photosClean : currentAlbum.photosWatermarked;
+
+            photos.forEach((photo, index) => {
+                const container = document.createElement('div');
+                container.className = 'photo-container';
+
+                const img = document.createElement('img');
+                img.src = photo;
+
+                container.appendChild(img);
+
+                if (!unlocked) {
+                    const watermark = document.createElement('div');
+                    watermark.className = 'watermark';
+                    watermark.textContent = '@EL_MASCARADO\n@SR_WANDERSSON';
+                    container.appendChild(watermark);
+                } else {
+                    const downloadButton = document.createElement('button');
+                    downloadButton.className = 'download-button';
+                    downloadButton.textContent = '📥 Baixar';
+                    downloadButton.onclick = () => forceDownload(photo, `foto${ index + 1}.jpg`);
+            container.appendChild(downloadButton);
+        }
+
+        photoArea.appendChild(container);
+        });
+    }
+
+        function unlockPhotos() {
+            const code = document.getElementById('codeInput').value.trim();
+            if (code === currentAlbum.code) {
+                unlocked = true;
+                renderPhotos();
+                alert('Fotos desbloqueadas! Agora você pode baixar as imagens sem marca d\'água.');
+            } else {
+                alert('Código incorreto!');
+            }
+        }
+
+        function forceDownload(url, filename) {
+            fetch(url)
+                .then(response => response.blob())
+                .then(blob => {
+                    const blobUrl = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = blobUrl;
+                    link.download = filename;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(blobUrl);
+                })
+                .catch(() => {
+                    alert('Erro ao baixar a imagem.');
+                });
+        }
+    </script>
+
+</body>
+
+</html>
