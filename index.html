@@ -5,12 +5,18 @@
     <meta charset="UTF-8">
     <title>Galeria El_Mascarado</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <style>
         body {
-            margin: 0;
-            font-family: "Poppins", sans-serif;
-            background: #0d0d0d;
+            background: #111;
             color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            user-select: none;
+            -webkit-user-drag: none;
+            -webkit-touch-callout: none;
         }
 
         header {
@@ -93,23 +99,6 @@
             }
         }
 
-        .flash-effect {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: white;
-            opacity: 0;
-            z-index: 9999;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-
-        .flash-active {
-            opacity: 1;
-        }
-
         .photo-area {
             display: flex;
             flex-wrap: wrap;
@@ -120,12 +109,23 @@
 
         .photo-container {
             position: relative;
-            max-width: 300px;
+            width: 300px;
+            height: 200px;
+            border-radius: 10px;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
         }
 
-        .photo-container img {
-            width: 100%;
-            border-radius: 10px;
+        .protect-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 10;
         }
 
         .download-button {
@@ -145,10 +145,8 @@
             left: 50%;
             transform: translate(-50%, -50%);
             opacity: 0.3;
-            /* ajuste a opacidade */
             pointer-events: none;
-            max-width: 70%;
-            /* ou o tamanho que desejar */
+            max-width: 50%;
         }
 
         input[type='text'] {
@@ -171,7 +169,7 @@
     </style>
 </head>
 
-<body>
+<body oncontextmenu="return false;" ondragstart="return false;" onselectstart="return false;">
 
     <header>
         <img src="albuns/logo.png" alt="Logo">
@@ -209,9 +207,10 @@
         <button style="margin:20px;" class="unlock-btn" onclick="closeGallery()">Voltar para álbuns</button>
     </div>
 
-    <div class="flash-effect" id="flash"></div>
-
     <script>
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('touchstart', e => { if (e.touches.length > 0) e.preventDefault(); }, { passive: false });
+
         const albums = {
             album1: {
                 title: 'Ensaio Gigi',
@@ -243,7 +242,6 @@
         function filterAlbums() {
             const query = document.getElementById('albumSearch').value.toLowerCase();
             const albumElements = document.querySelectorAll('.album');
-
             albumElements.forEach(album => {
                 const title = album.getAttribute('data-title').toLowerCase();
                 album.style.display = title.includes(query) ? 'block' : 'none';
@@ -251,7 +249,6 @@
         }
 
         function openAlbum(albumName) {
-            triggerFlash();
             currentAlbum = albums[albumName];
             unlocked = false;
             document.getElementById('albumTitle').innerText = currentAlbum.title;
@@ -265,14 +262,6 @@
             document.getElementById('gallerySection').style.display = 'none';
         }
 
-        function triggerFlash() {
-            const flash = document.getElementById('flash');
-            flash.classList.add('flash-active');
-            setTimeout(() => {
-                flash.classList.remove('flash-active');
-            }, 300);
-        }
-
         function renderPhotos() {
             const area = document.getElementById('photoArea');
             area.innerHTML = '';
@@ -281,27 +270,31 @@
             photos.forEach((photo, index) => {
                 const container = document.createElement('div');
                 container.className = 'photo-container';
+                container.style.backgroundImage = `url('${photo}')`;
+                container.style.backgroundSize = 'cover';
+                container.style.backgroundPosition = 'center';
+                container.style.backgroundRepeat = 'no-repeat';
 
-                const img = document.createElement('img');
-                img.src = photo;
-                container.appendChild(img);
+                const protect = document.createElement('div');
+                protect.className = 'protect-layer';
+                container.appendChild(protect);
 
                 if (!unlocked) {
                     const watermark = document.createElement('img');
                     watermark.className = 'watermark';
-                    watermark.src = 'albuns/logo.png'; // Caminho do seu PNG transparente
+                    watermark.src = 'albuns/logo.png';  // sua logo PNG transparente
                     container.appendChild(watermark);
                 } else {
                     const btn = document.createElement('button');
                     btn.className = 'download-button';
                     btn.textContent = '📥 Baixar';
-                    btn.onclick = () => forceDownload(photo, `${currentAlbum.title} - foto${index + 1}.jpg`);
-                    container.appendChild(btn);
-                }
-
-                area.appendChild(container);
-            });
+                    btn.onclick = () => forceDownload(photo, `${ currentAlbum.title } - foto${ index + 1}.jpg`);
+            container.appendChild(btn);
         }
+
+        area.appendChild(container);
+    });
+}
 
         function unlockPhotos() {
             const code = document.getElementById('codeInput').value.trim();
