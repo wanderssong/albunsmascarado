@@ -66,7 +66,6 @@
             overflow: hidden;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
-            animation: fadeIn 1s ease;
         }
 
         .album:hover {
@@ -87,18 +86,6 @@
             color: #fff;
         }
 
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-                transform: scale(0.95);
-            }
-
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
         .photo-area {
             display: flex;
             flex-wrap: wrap;
@@ -109,14 +96,14 @@
 
         .photo-container {
             position: relative;
-            width: 300px;
-            height: 200px;
-            border-radius: 10px;
-            overflow: hidden;
+            width: 100%;
+            max-width: 400px;
+            aspect-ratio: 4/3;
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
         }
 
         .protect-layer {
@@ -129,7 +116,8 @@
         }
 
         .download-button {
-            margin-top: 10px;
+            margin: 10px auto;
+            display: block;
             padding: 10px 20px;
             background: #ff6600;
             border: none;
@@ -146,7 +134,7 @@
             transform: translate(-50%, -50%);
             opacity: 0.3;
             pointer-events: none;
-            max-width: 50%;
+            max-width: 60%;
         }
 
         input[type='text'] {
@@ -176,7 +164,6 @@
         <h1>Bem-vindo à Galeria do El_Mascarado!</h1>
     </header>
 
-    <!-- Página Inicial -->
     <div id="homeSection">
         <div class="search-bar">
             <input type="text" id="albumSearch" placeholder="Digite o nome do evento ou álbum..."
@@ -196,10 +183,9 @@
         </div>
     </div>
 
-    <!-- Galeria Interna -->
     <div id="gallerySection" style="display:none;">
         <h1 id="albumTitle">Galeria</h1>
-        <div>
+        <div style="text-align:center;">
             <input type="text" id="codeInput" placeholder="Digite o código...">
             <button class="unlock-btn" onclick="unlockPhotos()">Desbloquear</button>
         </div>
@@ -271,9 +257,6 @@
                 const container = document.createElement('div');
                 container.className = 'photo-container';
                 container.style.backgroundImage = `url('${photo}')`;
-                container.style.backgroundSize = 'cover';
-                container.style.backgroundPosition = 'center';
-                container.style.backgroundRepeat = 'no-repeat';
 
                 const protect = document.createElement('div');
                 protect.className = 'protect-layer';
@@ -282,7 +265,7 @@
                 if (!unlocked) {
                     const watermark = document.createElement('img');
                     watermark.className = 'watermark';
-                    watermark.src = 'albuns/logo.png';  // sua logo PNG transparente
+                    watermark.src = 'albuns/logo.png';
                     container.appendChild(watermark);
                 } else {
                     const btn = document.createElement('button');
@@ -293,8 +276,8 @@
         }
 
         area.appendChild(container);
-    });
-}
+        });
+    }
 
         function unlockPhotos() {
             const code = document.getElementById('codeInput').value.trim();
