@@ -16,7 +16,6 @@
             overflow-x: hidden;
             user-select: none;
             -webkit-user-drag: none;
-            -webkit-touch-callout: none;
         }
 
         header {
@@ -64,8 +63,8 @@
             background: #1e1e1e;
             border-radius: 15px;
             overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .album:hover {
@@ -90,41 +89,24 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 15px;
+            gap: 20px;
             padding: 20px;
         }
 
         .photo-container {
             position: relative;
-            width: 100%;
             max-width: 400px;
-            aspect-ratio: 4/3;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+            width: 100%;
             border-radius: 10px;
             overflow: hidden;
+            background: #000;
         }
 
-        .protect-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 10;
-        }
-
-        .download-button {
-            margin: 10px auto;
+        .photo-container img.photo {
+            width: 100%;
             display: block;
-            padding: 10px 20px;
-            background: #ff6600;
-            border: none;
-            border-radius: 30px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
+            pointer-events: none;
+            user-select: none;
         }
 
         .watermark {
@@ -135,6 +117,29 @@
             opacity: 0.3;
             pointer-events: none;
             max-width: 60%;
+        }
+
+        .protect-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 5;
+        }
+
+        .download-button {
+            display: block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            background: #ff6600;
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 10;
+            position: relative;
         }
 
         input[type='text'] {
@@ -157,7 +162,7 @@
     </style>
 </head>
 
-<body oncontextmenu="return false;" ondragstart="return false;" onselectstart="return false;">
+<body oncontextmenu="return false;">
 
     <header>
         <img src="albuns/logo.png" alt="Logo">
@@ -194,9 +199,6 @@
     </div>
 
     <script>
-        document.addEventListener('contextmenu', e => e.preventDefault());
-        
-
         const albums = {
             album1: {
                 title: 'Ensaio Gigi',
@@ -256,17 +258,21 @@
             photos.forEach((photo, index) => {
                 const container = document.createElement('div');
                 container.className = 'photo-container';
-                container.style.backgroundImage = `url('${photo}')`;
 
-                const protect = document.createElement('div');
-                protect.className = 'protect-layer';
-                container.appendChild(protect);
+                const img = document.createElement('img');
+                img.src = photo;
+                img.className = 'photo';
+                container.appendChild(img);
 
                 if (!unlocked) {
                     const watermark = document.createElement('img');
                     watermark.className = 'watermark';
                     watermark.src = 'albuns/logo.png';
                     container.appendChild(watermark);
+
+                    const protect = document.createElement('div');
+                    protect.className = 'protect-layer';
+                    container.appendChild(protect);
                 } else {
                     const btn = document.createElement('button');
                     btn.className = 'download-button';
