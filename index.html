@@ -8,17 +8,43 @@
     <style>
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
-            background: #111;
+            font-family: "Poppins", sans-serif;
+            background: #0d0d0d;
             color: white;
         }
 
         header {
             text-align: center;
-            padding: 40px 20px;
-            font-size: 2em;
-            font-weight: bold;
+            padding: 20px;
+            background: #1a1a1a;
+        }
+
+        header img {
+            width: 120px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-weight: 700;
+            font-size: 1.5em;
             color: #ff6600;
+            margin: 0;
+        }
+
+        .search-bar {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .search-bar input {
+            padding: 10px 15px;
+            font-size: 1em;
+            border-radius: 30px;
+            border: none;
+            width: 80%;
+            max-width: 400px;
+            background: #1e1e1e;
+            color: white;
         }
 
         .albums {
@@ -29,16 +55,17 @@
         }
 
         .album {
-            background: #222;
-            border-radius: 12px;
+            background: #1e1e1e;
+            border-radius: 15px;
             overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
-            transition: transform 0.3s ease;
+            animation: fadeIn 1s ease;
         }
 
         .album:hover {
             transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(255, 102, 0, 0.7);
+            box-shadow: 0 0 20px rgba(255, 102, 0, 0.7);
         }
 
         .album img {
@@ -48,36 +75,52 @@
         }
 
         .album-title {
-            padding: 10px;
+            padding: 15px;
             text-align: center;
-            background: #333;
+            font-weight: bold;
+            color: #fff;
         }
 
-        .gallery {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            background: #000;
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .flash-effect {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
+            background: white;
+            opacity: 0;
             z-index: 9999;
-            overflow-y: auto;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .flash-active {
+            opacity: 1;
+        }
+
+        .photo-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
             padding: 20px;
         }
 
-        .gallery.visible {
-            display: flex;
-        }
-
-        .photos {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
-            width: 100%;
-            max-width: 1200px;
+        .photo-container {
+            position: relative;
+            max-width: 300px;
         }
 
         .photo-container img {
@@ -85,75 +128,44 @@
             border-radius: 10px;
         }
 
+        .download-button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: #ff6600;
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
         .watermark {
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) rotate(-30deg);
-            color: rgba(255, 255, 255, 0.3);
-            font-weight: bold;
-            font-size: 1em;
-            text-align: center;
+            transform: translate(-50%, -50%);
+            opacity: 0.3;
+            /* ajuste a opacidade */
             pointer-events: none;
-            width: 100%;
+            max-width: 70%;
+            /* ou o tamanho que desejar */
         }
 
-        .photo-container {
-            position: relative;
-        }
-
-        .download-button {
-            display: block;
-            margin: 5px 0 15px 0;
-            background: #ff6600;
-            border: none;
-            color: white;
+        input[type='text'] {
             padding: 10px;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 6px;
-        }
-
-        .download-button:hover {
-            background: #e65400;
-        }
-
-        .code-area {
-            margin: 20px;
-            text-align: center;
-        }
-
-        input[type="text"] {
-            padding: 10px;
-            font-size: 1em;
-            border-radius: 6px;
+            border-radius: 20px;
             border: none;
-            width: 180px;
+            font-size: 16px;
+            width: 200px;
         }
 
-        button {
-            padding: 10px 20px;
-            font-size: 1em;
-            background: #ff6600;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            color: white;
-        }
-
-        button:hover {
-            background: #e65400;
-        }
-
-        .close-btn {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            background: red;
-            padding: 10px 20px;
-            border-radius: 50%;
-            font-weight: bold;
-            color: white;
+        button.unlock-btn {
+            margin-left: 10px;
+            background: #1e1e1e;
+            border: 2px solid #ff6600;
+            color: #ff6600;
+            padding: 8px 16px;
+            border-radius: 20px;
             cursor: pointer;
         }
     </style>
@@ -161,48 +173,66 @@
 
 <body>
 
-    <header>Bem-vindo à Galeria do El_Mascarado!</header>
+    <header>
+        <img src="albuns/logo.png" alt="Logo">
+        <h1>Bem-vindo à Galeria do El_Mascarado!</h1>
+    </header>
 
-    <div class="albums">
-        <div class="album" onclick="openGallery('album1')">
-            <img src="albuns/gigi/capa.jpg">
-            <div class="album-title">Casamento Ana & Lucas</div>
+    <!-- Página Inicial -->
+    <div id="homeSection">
+        <div class="search-bar">
+            <input type="text" id="albumSearch" placeholder="Digite o nome do evento ou álbum..."
+                oninput="filterAlbums()">
         </div>
-        <div class="album" onclick="openGallery('album2')">
-            <img src="capa2.jpg">
-            <div class="album-title">Ensaio Praia</div>
+
+        <div class="albums" id="albumsList">
+            <div class="album" data-title="Ensaio Gigi" onclick="openAlbum('album1')">
+                <img src="albuns/gigi/capa.jpg" alt="Ensaio Gigi">
+                <div class="album-title">Ensaio Gigi</div>
+            </div>
+
+            <div class="album" data-title="Ensaio na Praia" onclick="openAlbum('album2')">
+                <img src="albuns/praia/capa.jpg" alt="Ensaio na Praia">
+                <div class="album-title">Ensaio na Praia</div>
+            </div>
         </div>
     </div>
 
-    <div id="gallery" class="gallery">
-        <button class="close-btn" onclick="closeGallery()">X</button>
-        <div class="photos" id="photoArea"></div>
-
-        <div class="code-area">
-            <p>Digite o código para liberar o download sem marca d'água:</p>
-            <input type="text" id="codeInput" maxlength="4">
-            <button onclick="unlockPhotos()">Desbloquear</button>
+    <!-- Galeria Interna -->
+    <div id="gallerySection" style="display:none;">
+        <h1 id="albumTitle">Galeria</h1>
+        <div>
+            <input type="text" id="codeInput" placeholder="Digite o código...">
+            <button class="unlock-btn" onclick="unlockPhotos()">Desbloquear</button>
         </div>
+        <div id="photoArea" class="photo-area"></div>
+        <button style="margin:20px;" class="unlock-btn" onclick="closeGallery()">Voltar para álbuns</button>
     </div>
+
+    <div class="flash-effect" id="flash"></div>
 
     <script>
         const albums = {
             album1: {
-                code: "5050",
-                photosWatermarked: [
-                    "albuns/gigi/ft01.jpg", "albuns/gigi/ft02.jpg", "albuns/gigi/ft03.jpg", "albuns/gigi/ft04.jpg", "albuns/gigi/ft05.jpg"
-                ],
-                photosClean: [
-                    "albuns/gigi/ft01.jpg", "albuns/gigi/ft02.jpg", "albuns/gigi/ft03.jpg", "albuns/gigi/ft04.jpg", "albuns/gigi/ft05.jpg"
+                title: 'Ensaio Gigi',
+                code: '5050',
+                photos: [
+                    'albuns/gigi/ft01.jpg',
+                    'albuns/gigi/ft02.jpg',
+                    'albuns/gigi/ft03.jpg',
+                    'albuns/gigi/ft04.jpg',
+                    'albuns/gigi/ft05.jpg'
                 ]
             },
             album2: {
-                code: "6060",
-                photosWatermarked: [
-                    "praia1w.jpg", "praia2w.jpg", "praia3w.jpg", "praia4w.jpg", "praia5w.jpg"
-                ],
-                photosClean: [
-                    "praia1.jpg", "praia2.jpg", "praia3.jpg", "praia4.jpg", "praia5.jpg"
+                title: 'Ensaio na Praia',
+                code: '6060',
+                photos: [
+                    'albuns/praia/praia1.jpg',
+                    'albuns/praia/praia2.jpg',
+                    'albuns/praia/praia3.jpg',
+                    'albuns/praia/praia4.jpg',
+                    'albuns/praia/praia5.jpg'
                 ]
             }
         };
@@ -210,23 +240,43 @@
         let currentAlbum = null;
         let unlocked = false;
 
-        function openGallery(albumName) {
+        function filterAlbums() {
+            const query = document.getElementById('albumSearch').value.toLowerCase();
+            const albumElements = document.querySelectorAll('.album');
+
+            albumElements.forEach(album => {
+                const title = album.getAttribute('data-title').toLowerCase();
+                album.style.display = title.includes(query) ? 'block' : 'none';
+            });
+        }
+
+        function openAlbum(albumName) {
+            triggerFlash();
             currentAlbum = albums[albumName];
             unlocked = false;
-            document.getElementById('gallery').classList.add('visible');
+            document.getElementById('albumTitle').innerText = currentAlbum.title;
+            document.getElementById('homeSection').style.display = 'none';
+            document.getElementById('gallerySection').style.display = 'block';
             renderPhotos();
         }
 
         function closeGallery() {
-            document.getElementById('gallery').classList.remove('visible');
-            document.getElementById('codeInput').value = '';
+            document.getElementById('homeSection').style.display = 'block';
+            document.getElementById('gallerySection').style.display = 'none';
+        }
+
+        function triggerFlash() {
+            const flash = document.getElementById('flash');
+            flash.classList.add('flash-active');
+            setTimeout(() => {
+                flash.classList.remove('flash-active');
+            }, 300);
         }
 
         function renderPhotos() {
-            const photoArea = document.getElementById('photoArea');
-            photoArea.innerHTML = '';
-
-            const photos = unlocked ? currentAlbum.photosClean : currentAlbum.photosWatermarked;
+            const area = document.getElementById('photoArea');
+            area.innerHTML = '';
+            const photos = currentAlbum.photos;
 
             photos.forEach((photo, index) => {
                 const container = document.createElement('div');
@@ -234,32 +284,31 @@
 
                 const img = document.createElement('img');
                 img.src = photo;
-
                 container.appendChild(img);
 
                 if (!unlocked) {
-                    const watermark = document.createElement('div');
+                    const watermark = document.createElement('img');
                     watermark.className = 'watermark';
-                    watermark.textContent = '@EL_MASCARADO\n@SR_WANDERSSON';
+                    watermark.src = 'albuns/logo.png'; // Caminho do seu PNG transparente
                     container.appendChild(watermark);
                 } else {
-                    const downloadButton = document.createElement('button');
-                    downloadButton.className = 'download-button';
-                    downloadButton.textContent = '📥 Baixar';
-                    downloadButton.onclick = () => forceDownload(photo, `foto${ index + 1}.jpg`);
-            container.appendChild(downloadButton);
-        }
+                    const btn = document.createElement('button');
+                    btn.className = 'download-button';
+                    btn.textContent = '📥 Baixar';
+                    btn.onclick = () => forceDownload(photo, `${currentAlbum.title} - foto${index + 1}.jpg`);
+                    container.appendChild(btn);
+                }
 
-        photoArea.appendChild(container);
-        });
-    }
+                area.appendChild(container);
+            });
+        }
 
         function unlockPhotos() {
             const code = document.getElementById('codeInput').value.trim();
             if (code === currentAlbum.code) {
                 unlocked = true;
+                alert('Fotos desbloqueadas! Agora você pode baixar.');
                 renderPhotos();
-                alert('Fotos desbloqueadas! Agora você pode baixar as imagens sem marca d\'água.');
             } else {
                 alert('Código incorreto!');
             }
