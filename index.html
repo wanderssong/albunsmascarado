@@ -248,7 +248,7 @@
                 if (!unlocked) {
                     const watermark = document.createElement('img');
                     watermark.className = 'watermark';
-                    watermark.src = 'albuns/logo.png'; // PNG transparente da sua logo
+                    watermark.src = 'albuns/logo.png';
                     container.appendChild(watermark);
 
                     const protect = document.createElement('div');
@@ -256,16 +256,36 @@
                     container.appendChild(protect);
 
                 } else {
-                    const downloadLink = document.createElement('a');
-                    downloadLink.href = photo;
-                    downloadLink.download = `${ currentAlbum.title } - foto${ index + 1 }.jpg`;
-                    downloadLink.textContent = '📥 Baixar';
-                    downloadLink.className = 'download-button';
-                    container.appendChild(downloadLink);
-                }
+                    const btn = document.createElement('button');
+                    btn.className = 'download-button';
+                    btn.textContent = '📥 Baixar';
+                    btn.onclick = () => downloadImage(photo, `${ currentAlbum.title } - foto${ index + 1}.jpg`);
+            container.appendChild(btn);
+        }
 
-                area.appendChild(container);
-            });
+        area.appendChild(container);
+        });
+    }
+
+        function downloadImage(url, filename) {
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) throw new Error('Erro ao baixar a imagem');
+                    return response.blob();
+                })
+                .then(blob => {
+                    const blobUrl = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = blobUrl;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    URL.revokeObjectURL(blobUrl);
+                })
+                .catch(() => {
+                    alert('Erro ao baixar a imagem.');
+                });
         }
 
         function filterAlbums() {
