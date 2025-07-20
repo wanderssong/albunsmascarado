@@ -181,9 +181,9 @@
                 <div class="album-title">Ensaio Gigi</div>
             </div>
 
-            <div class="album" data-title="Clebeson R. Ani. Deivison Pinto" onclick="openAlbum('album2')">
-                <img src="albuns/clebeson/capa.jpg" alt="Clebeson R. Ani. Deivison Pinto">
-                <div class="album-title">Clebeson R. Ani. Deivison Pinto</div>
+            <div class="album" data-title="Ensaio na Praia" onclick="openAlbum('album2')">
+                <img src="albuns/praia/capa.jpg" alt="Ensaio na Praia">
+                <div class="album-title">Ensaio na Praia</div>
             </div>
         </div>
     </div>
@@ -204,7 +204,7 @@
                 title: 'Ensaio Gigi',
                 code: '5050',
                 photos: [
-                    'https://firebasestorage.googleapis.com/v0/b/albuns-mascarado.firebasestorage.app/o/ALBUN%20GIGI%2Fft01.jpg?alt=media&token=415998d2-0700-426a-a67d-8c905b6f0836',
+                    'albuns/gigi/ft01.jpg',
                     'albuns/gigi/ft02.jpg',
                     'albuns/gigi/ft03.jpg',
                     'albuns/gigi/ft04.jpg',
@@ -212,81 +212,20 @@
                 ]
             },
             album2: {
-                title: 'Clebeson R. Ani. Deivison Pinto',
+                title: 'Ensaio na Praia',
                 code: '6060',
                 photos: [
-                    'https://firebasestorage.googleapis.com/v0/b/albuns-mascarado.firebasestorage.app/o/ALBUN%20CLEBESON%2F_DSC1688.jpg?alt=media&token=f15a408d-a1be-4686-bc0a-40a301f25101',
-                    'https://firebasestorage.googleapis.com/v0/b/albuns-mascarado.firebasestorage.app/o/ALBUN%20CLEBESON%2F_DSC2047.jpg?alt=media&token=9213b78f-1efa-4889-8586-600f350fcb76',
-                    'https://firebasestorage.googleapis.com/v0/b/albuns-mascarado.firebasestorage.app/o/ALBUN%20CLEBESON%2F_DSC2145.jpg?alt=media&token=69a487b1-3b5b-425e-a2f8-e80fd7112e6a',
-                    'https://firebasestorage.googleapis.com/v0/b/albuns-mascarado.firebasestorage.app/o/ALBUN%20CLEBESON%2F_DSC2161.jpg?alt=media&token=fa72a79d-e95e-43f5-b8d0-37bd6621e35b',
-                    'https://firebasestorage.googleapis.com/v0/b/albuns-mascarado.firebasestorage.app/o/ALBUN%20CLEBESON%2F_DSC2209.jpg?alt=media&token=ab34930f-f448-40de-ae13-296727b4dac0',
-                    'https://firebasestorage.googleapis.com/v0/b/albuns-mascarado.firebasestorage.app/o/ALBUN%20CLEBESON%2F_DSC2349.jpg?alt=media&token=c57b590b-d5df-4ce6-a1b4-993ed6674fb3',
-                    'https://firebasestorage.googleapis.com/v0/b/albuns-mascarado.firebasestorage.app/o/ALBUN%20CLEBESON%2F_DSC2366.jpg?alt=media&token=df09cbf9-8195-479b-8bcf-3f58ba34980e',
-                    'https://firebasestorage.googleapis.com/v0/b/albuns-mascarado.firebasestorage.app/o/ALBUN%20CLEBESON%2F_DSC2394.jpg?alt=media&token=02ba962b-6a51-4710-a6a3-dfed4a4a2c1a',
-                    'https://firebasestorage.googleapis.com/v0/b/albuns-mascarado.firebasestorage.app/o/ALBUN%20CLEBESON%2F_DSC2479.jpg?alt=media&token=e7fb8b21-e762-4e08-b5bd-636527018212'
+                    'albuns/praia/praia1.jpg',
+                    'albuns/praia/praia2.jpg',
+                    'albuns/praia/praia3.jpg',
+                    'albuns/praia/praia4.jpg',
+                    'albuns/praia/praia5.jpg'
                 ]
             }
         };
 
         let currentAlbum = null;
         let unlocked = false;
-
-        function renderPhotos() {
-            const area = document.getElementById('photoArea');
-            area.innerHTML = '';
-            const photos = currentAlbum.photos;
-
-            photos.forEach((photo, index) => {
-                const container = document.createElement('div');
-                container.className = 'photo-container';
-
-                const img = document.createElement('img');
-                img.src = photo;
-                img.className = 'photo';
-                container.appendChild(img);
-
-                if (!unlocked) {
-                    const watermark = document.createElement('img');
-                    watermark.className = 'watermark';
-                    watermark.src = 'albuns/logo.png';
-                    container.appendChild(watermark);
-
-                    const protect = document.createElement('div');
-                    protect.className = 'protect-layer';
-                    container.appendChild(protect);
-
-                } else {
-                    const btn = document.createElement('button');
-                    btn.className = 'download-button';
-                    btn.textContent = '📥 Baixar';
-                    btn.onclick = () => downloadImage(photo, `${ currentAlbum.title } - foto${ index + 1}.jpg`);
-            container.appendChild(btn);
-        }
-
-        area.appendChild(container);
-        });
-    }
-
-        function downloadImage(url, filename) {
-            fetch(url)
-                .then(response => {
-                    if (!response.ok) throw new Error('Erro ao baixar a imagem');
-                    return response.blob();
-                })
-                .then(blob => {
-                    const blobUrl = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = blobUrl;
-                    a.download = filename;
-                    document.body.appendChild(a);
-                    a.click();
-                    a.remove();
-                    URL.revokeObjectURL(blobUrl);
-                })
-                .catch(() => {
-                    alert('Erro ao baixar a imagem.');
-                });
-        }
 
         function filterAlbums() {
             const query = document.getElementById('albumSearch').value.toLowerCase();
@@ -311,6 +250,41 @@
             document.getElementById('gallerySection').style.display = 'none';
         }
 
+        function renderPhotos() {
+            const area = document.getElementById('photoArea');
+            area.innerHTML = '';
+            const photos = currentAlbum.photos;
+
+            photos.forEach((photo, index) => {
+                const container = document.createElement('div');
+                container.className = 'photo-container';
+
+                const img = document.createElement('img');
+                img.src = photo;
+                img.className = 'photo';
+                container.appendChild(img);
+
+                if (!unlocked) {
+                    const watermark = document.createElement('img');
+                    watermark.className = 'watermark';
+                    watermark.src = 'albuns/logo.png';
+                    container.appendChild(watermark);
+
+                    const protect = document.createElement('div');
+                    protect.className = 'protect-layer';
+                    container.appendChild(protect);
+                } else {
+                    const btn = document.createElement('button');
+                    btn.className = 'download-button';
+                    btn.textContent = '📥 Baixar';
+                    btn.onclick = () => forceDownload(photo, `${ currentAlbum.title } - foto${ index + 1}.jpg`);
+            container.appendChild(btn);
+        }
+
+        area.appendChild(container);
+        });
+    }
+
         function unlockPhotos() {
             const code = document.getElementById('codeInput').value.trim();
             if (code === currentAlbum.code) {
@@ -320,6 +294,24 @@
             } else {
                 alert('Código incorreto!');
             }
+        }
+
+        function forceDownload(url, filename) {
+            fetch(url)
+                .then(response => response.blob())
+                .then(blob => {
+                    const blobUrl = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = blobUrl;
+                    link.download = filename;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(blobUrl);
+                })
+                .catch(() => {
+                    alert('Erro ao baixar a imagem.');
+                });
         }
     </script>
 
