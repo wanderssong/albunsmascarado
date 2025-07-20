@@ -223,13 +223,50 @@
                     'https://firebasestorage.googleapis.com/v0/b/albuns-mascarado.firebasestorage.app/o/ALBUN%20CLEBESON%2F_DSC2349.jpg?alt=media&token=c57b590b-d5df-4ce6-a1b4-993ed6674fb3',
                     'https://firebasestorage.googleapis.com/v0/b/albuns-mascarado.firebasestorage.app/o/ALBUN%20CLEBESON%2F_DSC2366.jpg?alt=media&token=df09cbf9-8195-479b-8bcf-3f58ba34980e',
                     'https://firebasestorage.googleapis.com/v0/b/albuns-mascarado.firebasestorage.app/o/ALBUN%20CLEBESON%2F_DSC2394.jpg?alt=media&token=02ba962b-6a51-4710-a6a3-dfed4a4a2c1a',
-                    'https://firebasestorage.googleapis.com/v0/b/albuns-mascarado.firebasestorage.app/o/ALBUN%20CLEBESON%2F_DSC2479.jpg?alt=media&token=e7fb8b21-e762-4e08-b5bd-636527018212',
+                    'https://firebasestorage.googleapis.com/v0/b/albuns-mascarado.firebasestorage.app/o/ALBUN%20CLEBESON%2F_DSC2479.jpg?alt=media&token=e7fb8b21-e762-4e08-b5bd-636527018212'
                 ]
             }
         };
 
         let currentAlbum = null;
         let unlocked = false;
+
+        function renderPhotos() {
+            const area = document.getElementById('photoArea');
+            area.innerHTML = '';
+            const photos = currentAlbum.photos;
+
+            photos.forEach((photo, index) => {
+                const container = document.createElement('div');
+                container.className = 'photo-container';
+
+                const img = document.createElement('img');
+                img.src = photo;
+                img.className = 'photo';
+                container.appendChild(img);
+
+                if (!unlocked) {
+                    const watermark = document.createElement('img');
+                    watermark.className = 'watermark';
+                    watermark.src = 'albuns/logo.png'; // PNG transparente da sua logo
+                    container.appendChild(watermark);
+
+                    const protect = document.createElement('div');
+                    protect.className = 'protect-layer';
+                    container.appendChild(protect);
+
+                } else {
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = photo;
+                    downloadLink.download = `${ currentAlbum.title } - foto${ index + 1 }.jpg`;
+                    downloadLink.textContent = '📥 Baixar';
+                    downloadLink.className = 'download-button';
+                    container.appendChild(downloadLink);
+                }
+
+                area.appendChild(container);
+            });
+        }
 
         function filterAlbums() {
             const query = document.getElementById('albumSearch').value.toLowerCase();
@@ -254,41 +291,6 @@
             document.getElementById('gallerySection').style.display = 'none';
         }
 
-        function renderPhotos() {
-            const area = document.getElementById('photoArea');
-            area.innerHTML = '';
-            const photos = currentAlbum.photos;
-
-            photos.forEach((photo, index) => {
-                const container = document.createElement('div');
-                container.className = 'photo-container';
-
-                const img = document.createElement('img');
-                img.src = photo;
-                img.className = 'photo';
-                container.appendChild(img);
-
-                if (!unlocked) {
-                    const watermark = document.createElement('img');
-                    watermark.className = 'watermark';
-                    watermark.src = 'albuns/logo.png';
-                    container.appendChild(watermark);
-
-                    const protect = document.createElement('div');
-                    protect.className = 'protect-layer';
-                    container.appendChild(protect);
-                } else {
-                    const btn = document.createElement('button');
-                    btn.className = 'download-button';
-                    btn.textContent = '📥 Baixar';
-                    btn.onclick = () => forceDownload(photo, `${ currentAlbum.title } - foto${ index + 1}.jpg`);
-            container.appendChild(btn);
-        }
-
-        area.appendChild(container);
-        });
-    }
-
         function unlockPhotos() {
             const code = document.getElementById('codeInput').value.trim();
             if (code === currentAlbum.code) {
@@ -298,24 +300,6 @@
             } else {
                 alert('Código incorreto!');
             }
-        }
-
-        function forceDownload(url, filename) {
-            fetch(url)
-                .then(response => response.blob())
-                .then(blob => {
-                    const blobUrl = URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.href = blobUrl;
-                    link.download = filename;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    URL.revokeObjectURL(blobUrl);
-                })
-                .catch(() => {
-                    alert('Erro ao baixar a imagem.');
-                });
         }
     </script>
 
