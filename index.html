@@ -295,8 +295,10 @@
             <h2>Solicitar Orçamento</h2>
             <input type="text" id="nome" placeholder="Seu nome" />
             <input type="text" id="evento" placeholder="Evento pretendido" />
-            <input type="date" id="data" />
-            <input type="time" id="hora" />
+            <label for="dataInput">Data pretendida:</label>
+            <input type="date" id="dataInput">
+            <label for="horaInput">Horário pretendido:</label>
+            <input type="time" id="horaInput">
             <button onclick="enviarWhatsApp()">Solicitar no WhatsApp</button>
             <button class="close-btn" onclick="closeModal()">Fechar</button>
         </div>
@@ -453,7 +455,7 @@
             const evento = document.getElementById("evento").value.trim();
             const dataInput = document.getElementById('dataInput').value;
             const [ano, mes, dia] = dataInput.split('-');
-            const dataFormatada = `${ dia }/${mes}/${ ano }`;
+            const dataFormatada = `${dia}/${mes}/${ano}`;
             const hora = document.getElementById("hora").value;
 
             if (!nome || !evento || !data || !hora) {
