@@ -191,13 +191,13 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 60px;
-            height: 60px;
+            width: 45px;
+            height: 45px;
             background: #ff0000;
             border-radius: 50%;
             border: none;
             color: white;
-            font-size: 24px;
+            font-size: 20px;
             cursor: pointer;
             box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
         }
@@ -278,25 +278,23 @@
         /* Botão voltar estilizado */
         #btnVoltar {
             position: fixed;
-            bottom: 90px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.1);
+            top: 20px;
+            left: 20px;
+            background: #ff0000;
             color: white;
-            border: 2px solid transparent;
+            border: none;
             border-radius: 30px;
-            padding: 12px 18px;
-            font-weight: 600;
-            font-size: 16px;
+            padding: 10px 20px;
+            font-weight: bold;
+            font-size: 14px;
             cursor: pointer;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-            transition: background-color 0.3s ease, border-color 0.3s ease;
-            z-index: 1000;
+            z-index: 9999;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: background 0.3s ease;
         }
 
         #btnVoltar:hover {
-            background: #ff0000;
-            border-color: #ff0000;
-            box-shadow: 0 0 15px #ff0000;
+            background: #e60000;
         }
     </style>
 </head>
@@ -320,7 +318,7 @@
         <button id="btnVoltar" onclick="closeGallery()">← Voltar</button>
     </div>
 
-    <div class="floating-button-with-text">
+    <div id="orcamentoButton" class="floating-button-with-text">
         <svg viewBox="0 0 100 100" class="rotating-circle">
             <defs>
                 <path id="circlePath" d="M50,50 m-40,0 a40,40 0 1,1 80,0 a40,40 0 1,1 -80,0">
@@ -526,7 +524,8 @@
             <a href="https://wa.me/5568996129443" target="_blank">
                 <img src="albuns/wpp.png" alt="WhatsApp" style="width: 35px; height: 35px;">
             </a>
-            <a href="https://www.instagram.com/el_mascarado.fts?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank">
+            <a href="https://www.instagram.com/el_mascarado.fts?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+                target="_blank">
                 <img src="albuns/inst.png" alt="Instagram" style="width: 35px; height: 35px;">
             </a>
             <a href="https://www.tiktok.com/@sr_wandersson?_t=ZM-8yFbLqlsRom&_r=1" target="_blank">
