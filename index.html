@@ -2,26 +2,24 @@
 <html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Galeria El_Mascarado</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <style>
         body {
-            background: #111;
-            color: white;
-            font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0;
+            background: #111;
+            font-family: Arial, sans-serif;
+            color: white;
             overflow-x: hidden;
             user-select: none;
-            -webkit-user-drag: none;
         }
 
         header {
             text-align: center;
-            padding: 20px;
             background: #1a1a1a;
+            padding: 20px;
         }
 
         header img {
@@ -30,9 +28,8 @@
         }
 
         h1 {
-            font-weight: 700;
             font-size: 1.5em;
-            color: #ff6600;
+            color: #ff0000;
             margin: 0;
         }
 
@@ -43,13 +40,19 @@
 
         .search-bar input {
             padding: 10px 15px;
-            font-size: 1em;
             border-radius: 30px;
             border: none;
             width: 80%;
             max-width: 400px;
+            font-size: 1em;
             background: #1e1e1e;
             color: white;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            background: #2a2a2a;
         }
 
         .albums {
@@ -63,26 +66,38 @@
             background: #1e1e1e;
             border-radius: 15px;
             overflow: hidden;
-            cursor: pointer;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            cursor: pointer;
         }
 
         .album:hover {
             transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(255, 102, 0, 0.7);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
         }
 
         .album img {
             width: 100%;
             height: 200px;
             object-fit: cover;
+            display: block;
         }
 
         .album-title {
             padding: 15px;
             text-align: center;
             font-weight: bold;
-            color: #fff;
+            font-size: 1.1em;
+        }
+
+        .album-info {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 0.8em;
         }
 
         .photo-area {
@@ -100,11 +115,23 @@
             border-radius: 10px;
             overflow: hidden;
             background: #000;
+            animation: fadeIn 0.7s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         .photo-container img.photo {
             width: 100%;
-            display: block;
             pointer-events: none;
             user-select: none;
         }
@@ -114,9 +141,9 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            opacity: 0.3;
-            pointer-events: none;
+            opacity: 0.2;
             max-width: 60%;
+            pointer-events: none;
         }
 
         .protect-layer {
@@ -128,36 +155,94 @@
             z-index: 5;
         }
 
-        .download-button {
-            display: block;
-            margin: 10px auto;
-            padding: 10px 20px;
-            background: #ff6600;
-            border: none;
-            border-radius: 30px;
+        .floating-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #ff0000;
             color: white;
-            font-weight: bold;
-            cursor: pointer;
-            z-index: 10;
-            position: relative;
-        }
-
-        input[type='text'] {
-            padding: 10px;
-            border-radius: 20px;
             border: none;
-            font-size: 16px;
-            width: 200px;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+            cursor: pointer;
+            z-index: 1000;
         }
 
-        button.unlock-btn {
-            margin-left: 10px;
-            background: #1e1e1e;
-            border: 2px solid #ff6600;
-            color: #ff6600;
-            padding: 8px 16px;
-            border-radius: 20px;
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+
+        .modal-content {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            color: white;
+            text-align: center;
+        }
+
+        .modal-content input,
+        .modal-content select {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .modal-content button {
+            background: #ff0000;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            margin-top: 10px;
+            border-radius: 8px;
             cursor: pointer;
+            width: 100%;
+        }
+
+        .close-btn {
+            background: #444;
+        }
+
+        /* Botão voltar estilizado */
+        #btnVoltar {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid transparent;
+            border-radius: 30px;
+            padding: 12px 18px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            z-index: 1000;
+        }
+
+        #btnVoltar:hover {
+            background: #ff0000;
+            border-color: #ff0000;
+            box-shadow: 0 0 15px #ff0000;
         }
     </style>
 </head>
@@ -165,44 +250,43 @@
 <body oncontextmenu="return false;">
 
     <header>
-        <img src="albuns/logo.png" alt="Logo">
-        <h1>Bem-vindo à Galeria do El_Mascarado!</h1>
+        <img src="albuns/logo.png" alt="Logo" />
+        <h1>Galeria El_Mascarado</h1>
     </header>
 
-    <div id="homeSection">
-        <div class="search-bar">
-            <input type="text" id="albumSearch" placeholder="Digite o nome do evento ou álbum..."
-                oninput="filterAlbums()">
-        </div>
-
-        <div class="albums" id="albumsList">
-            <div class="album" data-title="GGPP" onclick="openAlbum('album1')">
-                <img src="albuns/GGPP/capa.jpg" alt="GGPP">
-                <div class="album-title">GGPP</div>
-            </div>
-
-            <div class="album" data-title="Ensaio na Praia" onclick="openAlbum('album2')">
-                <img src="albuns/praia/capa.jpg" alt="Ensaio na Praia">
-                <div class="album-title">Ensaio na Praia</div>
-            </div>
-        </div>
+    <div class="search-bar">
+        <input type="text" id="albumSearch" placeholder="Buscar álbum..." oninput="filterAlbums()" />
     </div>
+
+    <div class="albums" id="albumsList"></div>
 
     <div id="gallerySection" style="display:none;">
         <h1 id="albumTitle">Galeria</h1>
-        <div style="text-align:center;">
-            <input type="text" id="codeInput" placeholder="Digite o código...">
-            <button class="unlock-btn" onclick="unlockPhotos()">Desbloquear</button>
-        </div>
         <div id="photoArea" class="photo-area"></div>
-        <button style="margin:20px;" class="unlock-btn" onclick="closeGallery()">Voltar para álbuns</button>
+        <button id="btnVoltar" onclick="closeGallery()">← Voltar</button>
+    </div>
+
+    <button class="floating-btn" onclick="openModal()">💬</button>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h2>Solicitar Orçamento</h2>
+            <input type="text" id="nome" placeholder="Seu nome" />
+            <input type="text" id="evento" placeholder="Evento pretendido" />
+            <input type="date" id="data" />
+            <input type="time" id="hora" />
+            <button onclick="enviarWhatsApp()">Solicitar no WhatsApp</button>
+            <button class="close-btn" onclick="closeModal()">Fechar</button>
+        </div>
     </div>
 
     <script>
         const albums = {
             album1: {
-                title: 'GGPP',
-                code: '5050',
+                title: "Ensaio Gigi",
+                local: "Aquarela das Artes",
+                data: "20/07/2025",
+                cover: "albuns/GGPP/capa.jpg", // capa local
                 photos: [
                     'https://firebasestorage.googleapis.com/v0/b/albuns-mascarado.firebasestorage.app/o/GGPP%2F_DSC5575.jpg?alt=media&token=b643486f-2549-4c36-9f3b-07eb038cfe78',
                     'https://firebasestorage.googleapis.com/v0/b/albuns-mascarado.firebasestorage.app/o/GGPP%2F_DSC5582.jpg?alt=media&token=8c544c4b-9a5f-4316-bd98-451b1375ca94',
@@ -264,113 +348,103 @@
                     'https://firebasestorage.googleapis.com/v0/b/albuns-mascarado.firebasestorage.app/o/GGPP%2F_DSC5954.jpg?alt=media&token=da30b91a-1aa4-485b-b053-e168eadfa16e',
                     'https://firebasestorage.googleapis.com/v0/b/albuns-mascarado.firebasestorage.app/o/GGPP%2F_DSC5956.jpg?alt=media&token=2ee615b4-0ab7-4010-8451-f143d731d8d9',
                     'https://firebasestorage.googleapis.com/v0/b/albuns-mascarado.firebasestorage.app/o/GGPP%2F_DSC5959.jpg?alt=media&token=e3de79a4-f602-460f-9f7f-c86553b0cc55',
-                    
-                ]
+                ],
             },
             album2: {
-                title: 'Ensaio na Praia',
-                code: '6060',
+                title: "Clebeson R. Ani. Deivison Pinto",
+                local: "Espaço VIP",
+                data: "10/08/2025",
+                cover: "albuns/clebeson/capa.jpg", // capa local
                 photos: [
-                    'albuns/praia/praia1.jpg',
-                    'albuns/praia/praia2.jpg',
-                    'albuns/praia/praia3.jpg',
-                    'albuns/praia/praia4.jpg',
-                    'albuns/praia/praia5.jpg'
-                ]
-            }
+                    "https://firebasestorage.googleapis.com/v0/b/albuns-mascarado.appspot.com/o/CLEBESON%2F_DSC2047.jpg?alt=media&token=TOKEN_AQUI",
+                    "https://firebasestorage.googleapis.com/v0/b/albuns-mascarado.appspot.com/o/CLEBESON%2F_DSC2048.jpg?alt=media&token=TOKEN_AQUI",
+                ],
+            },
         };
 
         let currentAlbum = null;
-        let unlocked = false;
 
-        function filterAlbums() {
-            const query = document.getElementById('albumSearch').value.toLowerCase();
-            const albumElements = document.querySelectorAll('.album');
-            albumElements.forEach(album => {
-                const title = album.getAttribute('data-title').toLowerCase();
-                album.style.display = title.includes(query) ? 'block' : 'none';
+        function renderAlbums() {
+            const container = document.getElementById("albumsList");
+            container.innerHTML = "";
+            Object.entries(albums).forEach(([key, album]) => {
+                const div = document.createElement("div");
+                div.className = "album";
+                div.onclick = () => openAlbum(key);
+
+                div.innerHTML = `
+                    <img src="${album.cover}" alt="${album.title}" />
+                    <div class="album-title">${album.title}</div>
+                    <div class="album-info">${album.local} - ${album.data}</div>
+                `;
+
+                container.appendChild(div);
             });
         }
 
-        function openAlbum(albumName) {
-            currentAlbum = albums[albumName];
-            unlocked = false;
-            document.getElementById('albumTitle').innerText = currentAlbum.title;
-            document.getElementById('homeSection').style.display = 'none';
-            document.getElementById('gallerySection').style.display = 'block';
+        function openAlbum(key) {
+            currentAlbum = albums[key];
+            document.getElementById("albumTitle").innerText = currentAlbum.title;
+            document.getElementById("albumsList").style.display = "none";
+            document.getElementById("gallerySection").style.display = "block";
             renderPhotos();
         }
 
         function closeGallery() {
-            document.getElementById('homeSection').style.display = 'block';
-            document.getElementById('gallerySection').style.display = 'none';
+            document.getElementById("albumsList").style.display = "grid";
+            document.getElementById("gallerySection").style.display = "none";
         }
 
         function renderPhotos() {
-            const area = document.getElementById('photoArea');
-            area.innerHTML = '';
-            const photos = currentAlbum.photos;
-
-            photos.forEach((photo, index) => {
-                const container = document.createElement('div');
-                container.className = 'photo-container';
-
-                const img = document.createElement('img');
-                img.src = photo;
-                img.className = 'photo';
-                container.appendChild(img);
-
-                if (!unlocked) {
-                    const watermark = document.createElement('img');
-                    watermark.className = 'watermark';
-                    watermark.src = 'albuns/logo.png';
-                    container.appendChild(watermark);
-
-                    const protect = document.createElement('div');
-                    protect.className = 'protect-layer';
-                    container.appendChild(protect);
-                } else {
-                    const btn = document.createElement('button');
-                    btn.className = 'download-button';
-                    btn.textContent = '📥 Baixar';
-                    btn.onclick = () => forceDownload(photo, `${ currentAlbum.title } - foto${ index + 1}.jpg`);
-            container.appendChild(btn);
+            const area = document.getElementById("photoArea");
+            area.innerHTML = "";
+            currentAlbum.photos.forEach((photo) => {
+                const container = document.createElement("div");
+                container.className = "photo-container";
+                container.innerHTML = `
+                    <img src="${photo}" class="photo" />
+                    <img src="albuns/logo.png" class="watermark" />
+                    <div class="protect-layer"></div>
+                `;
+                area.appendChild(container);
+            });
         }
 
-        area.appendChild(container);
-        });
-    }
+        function filterAlbums() {
+            const query = document.getElementById("albumSearch").value.toLowerCase();
+            const albumsDivs = document.querySelectorAll(".album");
+            albumsDivs.forEach((div) => {
+                div.style.display = div.innerText.toLowerCase().includes(query) ? "block" : "none";
+            });
+        }
 
-        function unlockPhotos() {
-            const code = document.getElementById('codeInput').value.trim();
-            if (code === currentAlbum.code) {
-                unlocked = true;
-                alert('Fotos desbloqueadas! Agora você pode baixar.');
-                renderPhotos();
-            } else {
-                alert('Código incorreto!');
+        function openModal() {
+            document.getElementById("modal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("modal").style.display = "none";
+        }
+
+        function enviarWhatsApp() {
+            const nome = document.getElementById("nome").value.trim();
+            const evento = document.getElementById("evento").value.trim();
+            const data = document.getElementById("data").value;
+            const hora = document.getElementById("hora").value;
+
+            if (!nome || !evento || !data || !hora) {
+                alert("Por favor, preencha todos os campos.");
+                return;
             }
+
+            const mensagem = `Olá! Me chamo ${nome} e gostaria de solicitar orçamento para o evento: ${evento}. Data: ${data}, Horário: ${hora}.`;
+
+            const link = `https://wa.me/5568996129443?text=${encodeURIComponent(mensagem)}`;
+            window.open(link, "_blank");
         }
 
-        function forceDownload(url, filename) {
-            fetch(url)
-                .then(response => response.blob())
-                .then(blob => {
-                    const blobUrl = URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.href = blobUrl;
-                    link.download = filename;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    URL.revokeObjectURL(blobUrl);
-                })
-                .catch(() => {
-                    alert('Erro ao baixar a imagem.');
-                });
-        }
+        renderAlbums();
     </script>
-
 </body>
 
 </html>
