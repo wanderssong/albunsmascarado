@@ -177,21 +177,53 @@
             z-index: 5;
         }
 
-        .floating-btn {
+        .floating-button-with-text {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #ff0000;
-            color: white;
-            border: none;
-            border-radius: 50%;
+            bottom: 30px;
+            right: 30px;
+            width: 100px;
+            height: 100px;
+            z-index: 9999;
+        }
+
+        .floating-button-with-text button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             width: 60px;
             height: 60px;
+            background: #ff0000;
+            border-radius: 50%;
+            border: none;
+            color: white;
             font-size: 24px;
-            font-weight: bold;
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
             cursor: pointer;
-            z-index: 1000;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+        }
+
+        .rotating-circle {
+            width: 100px;
+            height: 100px;
+            transform: rotate(0deg);
+            animation: spin 5s linear infinite;
+        }
+
+        .rotating-circle text {
+            font-size: 5px;
+            fill: white;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .modal {
@@ -288,7 +320,20 @@
         <button id="btnVoltar" onclick="closeGallery()">← Voltar</button>
     </div>
 
-    <button class="floating-btn" onclick="openModal()">💬</button>
+    <div class="floating-button-with-text">
+        <svg viewBox="0 0 100 100" class="rotating-circle">
+            <defs>
+                <path id="circlePath" d="M50,50 m-40,0 a40,40 0 1,1 80,0 a40,40 0 1,1 -80,0">
+                </path>
+            </defs>
+            <text>
+                <textPath href="#circlePath">
+                    O R Ç A M E N T O • O R Ç A M E N T O •
+                </textPath>
+            </text>
+        </svg>
+        <button onclick="openModal()">💬</button>
+    </div>
 
     <div id="modal" class="modal">
         <div class="modal-content">
