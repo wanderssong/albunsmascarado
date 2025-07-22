@@ -212,7 +212,7 @@
             padding: 20px;
             border-radius: 10px;
             width: 90%;
-            max-width: 400px;
+            max-width: 350px;
             color: white;
             text-align: center;
         }
@@ -451,7 +451,9 @@
         function enviarWhatsApp() {
             const nome = document.getElementById("nome").value.trim();
             const evento = document.getElementById("evento").value.trim();
-            const data = document.getElementById("data").value;
+            const dataInput = document.getElementById('dataInput').value;
+            const [ano, mes, dia] = dataInput.split('-');
+            const dataFormatada = `${ dia }/${mes}/${ ano }`;
             const hora = document.getElementById("hora").value;
 
             if (!nome || !evento || !data || !hora) {
