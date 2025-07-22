@@ -463,18 +463,34 @@
 
             // Formatando a data para DD/MM/AAAA
             const [ano, mes, dia] = data.split('-');
-            const dataFormatada = `${ dia }/${mes}/${ ano }`;
+            const dataFormatada = `${dia}/${mes}/${ano}`;
 
-            const mensagem = `Olá! Me chamo ${ nome }.Gostaria de solicitar um orçamento para o evento: ${ evento }, na data ${ dataFormatada } às ${ hora }.`;
+            const mensagem = `Olá! Me chamo ${nome}.Gostaria de solicitar um orçamento para o evento: ${evento}, na data ${dataFormatada} às ${hora}.`;
 
             const numeroWhatsApp = '5568996129443';
             const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
 
-                window.open(url, '_blank');
+            window.open(url, '_blank');
         }
 
         renderAlbums();
     </script>
+
+    <footer style="background: #1a1a1a; padding: 15px; text-align: center; color: white; font-size: 0.9em;">
+        <div style="display: flex; justify-content: center; gap: 20px; align-items: center;">
+            <a href="https://wa.me/5568996129443" target="_blank">
+                <img src="albuns/wpp.png" alt="WhatsApp" style="width: 24px; height: 24px;">
+            </a>
+            <a href="https://www.instagram.com/SEUUSUARIO" target="_blank">
+                <img src="albuns/inst.png" alt="Instagram" style="width: 24px; height: 24px;">
+            </a>
+            <a href="https://www.tiktok.com/@SEUUSUARIO" target="_blank">
+                <img src="albuns/ttk.png" alt="TikTok" style="width: 24px; height: 24px;">
+            </a>
+        </div>
+        <div style="margin-top: 10px;">© El_Mascarado Fotografias</div>
+    </footer>
+
 </body>
 
 </html>
