@@ -461,7 +461,11 @@
                 return;
             }
 
-            const mensagem = `Olá! Me chamo ${ nome }.Gostaria de solicitar um orçamento para o evento: ${ evento }, na data ${ data } às ${ hora }.`;
+            // Formatando a data para DD/MM/AAAA
+            const [ano, mes, dia] = data.split('-');
+            const dataFormatada = `${ dia }/${mes}/${ ano }`;
+
+            const mensagem = `Olá! Me chamo ${ nome }.Gostaria de solicitar um orçamento para o evento: ${ evento }, na data ${ dataFormatada } às ${ hora }.`;
 
             const numeroWhatsApp = '5568996129443';
             const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
