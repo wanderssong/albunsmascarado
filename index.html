@@ -84,20 +84,29 @@
         }
 
         .album-title {
-            padding: 15px;
-            text-align: center;
+            background: rgba(0, 0, 0, 0.7);
+            font-size: 1em;
+            padding: 5px 10px;
+            margin: 0;
+            color: white;
             font-weight: bold;
-            font-size: 1.1em;
+            text-align: center;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            box-sizing: border-box;
+            z-index: 3;
         }
 
         .album-info {
             position: absolute;
-            bottom: 10px;
+            top: 10px;
             left: 10px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 5px 10px;
-            border-radius: 8px;
-            font-size: 0.8em;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            z-index: 2;
         }
 
         .photo-area {
@@ -127,6 +136,19 @@
             to {
                 opacity: 1;
                 transform: scale(1);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .album-info {
+                top: 5px;
+                left: 5px;
+                gap: 3px;
+            }
+
+            .album-title {
+                font-size: 0.9em;
+                padding: 4px 8px;
             }
         }
 
@@ -283,7 +305,7 @@
     <script>
         const albums = {
             album1: {
-                title: "Ensaio Gigi",
+                title: "Ensaio GGRR",
                 local: "Aquarela das Artes",
                 data: "20/07/2025",
                 cover: "albuns/GGPP/capa.jpg", // capa local
