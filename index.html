@@ -451,22 +451,22 @@
         }
 
         function enviarWhatsApp() {
-            const nome = document.getElementById("nome").value.trim();
-            const evento = document.getElementById("evento").value.trim();
-            const dataInput = document.getElementById('dataInput').value;
-            const [ano, mes, dia] = dataInput.split('-');
-            const dataFormatada = `${dia}/${mes}/${ano}`;
-            const hora = document.getElementById("hora").value;
+            const nome = document.getElementById('nome').value.trim();
+            const evento = document.getElementById('evento').value.trim();
+            const data = document.getElementById('dataInput').value;
+            const hora = document.getElementById('horaInput').value;
 
             if (!nome || !evento || !data || !hora) {
-                alert("Por favor, preencha todos os campos.");
+                alert('Por favor, preencha todos os campos.');
                 return;
             }
 
-            const mensagem = `Olá! Me chamo ${nome} e gostaria de solicitar orçamento para o evento: ${evento}. Data: ${data}, Horário: ${hora}.`;
+            const mensagem = `Olá! Me chamo ${ nome }.Gostaria de solicitar um orçamento para o evento: ${ evento }, na data ${ data } às ${ hora }.`;
 
-            const link = `https://wa.me/5568996129443?text=${encodeURIComponent(mensagem)}`;
-            window.open(link, "_blank");
+            const numeroWhatsApp = '5568996129443';
+            const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+
+                window.open(url, '_blank');
         }
 
         renderAlbums();
