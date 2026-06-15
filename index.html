@@ -855,6 +855,63 @@
 
         let currentAlbum = null;
 
+        function filterAlbums() {
+            const termo = document.getElementById('albumSearch').value.toLowerCase();
+            document.querySelectorAll('.album').forEach(card => {
+                card.style.display = card.innerText.toLowerCase().includes(termo) ? '' : 'none';
+            });
+        }
+
+        function openAlbum(key) {
+            currentAlbum = key;
+            const album = albums[key];
+
+            document.getElementById('albumsList').style.display = 'none';
+            document.querySelector('.search-bar').style.display = 'none';
+            document.querySelector('header').style.display = 'none';
+            document.getElementById('gallerySection').style.display = 'block';
+            document.getElementById('albumTitle').innerText = album.title;
+
+            const area = document.getElementById('photoArea');
+            area.innerHTML = '';
+
+            album.photos.forEach(url => {
+                const div = document.createElement('div');
+                div.className = 'photo-container';
+                div.innerHTML = `<img class="photo" src="${url}" loading="lazy">`;
+                area.appendChild(div);
+            });
+
+            window.scrollTo(0, 0);
+        }
+
+        function closeGallery() {
+            document.getElementById('gallerySection').style.display = 'none';
+            document.getElementById('albumsList').style.display = 'grid';
+            document.querySelector('.search-bar').style.display = 'block';
+            document.querySelector('header').style.display = 'block';
+        }
+
+        function openModal() {
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        function enviarWhatsApp() {
+            const nome = document.getElementById('nome').value || '';
+            const evento = document.getElementById('evento').value || '';
+            const data = document.getElementById('dataInput').value || '';
+            const hora = document.getElementById('horaInput').value || '';
+
+            const msg = `Olá, meu nome é ${nome}. Gostaria de solicitar orçamento. Evento: ${evento}. Data: ${data}. Horário: ${hora}`;
+            window.open(`https://wa.me/5568996129443?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+
+
 
         function renderAlbums() {
             const container = document.getElementById("albumsList");
