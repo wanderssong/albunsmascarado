@@ -107,6 +107,7 @@
             position: sticky;
             top: 0;
             z-index: 20;
+            margin-bottom: 18px;
             text-align: center;
             padding: 18px 16px;
             margin: 0;
@@ -140,7 +141,7 @@
             gap: 28px;
             width: min(1220px, 100%);
             margin: 0 auto;
-            padding: 38px 22px 70px;
+            padding: 70px 22px 70px;
             perspective: 1200px;
             transform-style: preserve-3d;
         }
@@ -168,7 +169,7 @@
 
         .album.is-front {
             z-index: 10;
-            transform: translateY(-8px) translateZ(80px) scale(1.055) rotateX(0deg);
+            transform: translateY(0px) translateZ(40px) scale(1.02) rotateX(0deg);
             border-color: rgba(255, 31, 31, 0.42);
             box-shadow: 0 34px 80px rgba(0, 0, 0, 0.58), 0 0 38px rgba(255, 0, 0, 0.2);
         }
@@ -433,7 +434,8 @@
             .albums {
                 grid-template-columns: 1fr;
                 gap: 22px;
-                padding: 24px 16px 112px;
+                padding: 55px 16px 112px;
+                margin-top: 12px;
                 perspective: 900px;
             }
 
