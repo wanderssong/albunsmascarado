@@ -277,7 +277,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            opacity: 0.9;
+            opacity: 0.22;
             max-width: 60%;
             pointer-events: none;
             filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.65));
@@ -879,7 +879,11 @@
             album.photos.forEach(f => {
                 const div = document.createElement('div');
                 div.className = 'photo-container';
-                div.innerHTML = `<img class="photo" src="${f}" loading="lazy">`;
+                div.innerHTML = `
+        <img class="photo" src="${f}" loading="lazy">
+        <img class="watermark" src="albuns/logo.png" alt="Marca d'água">
+        <div class="protect-layer"></div>
+        `;
                 area.appendChild(div);
             });
 
