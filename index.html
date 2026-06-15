@@ -889,9 +889,9 @@
                 container.appendChild(div);
             });
 
-            if (typeof startAlbumAnimation === "function") {
-                startAlbumAnimation();
-            }
+            document.querySelectorAll('.album').forEach((card, i) => {
+                setTimeout(() => card.classList.add('show-3d'), i * 120);
+            });
         }
 
 
